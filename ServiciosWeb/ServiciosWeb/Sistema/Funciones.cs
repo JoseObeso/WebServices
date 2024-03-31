@@ -20,7 +20,6 @@ namespace ServiciosWeb.Sistema
             }
             StreamWriter Archivo = new StreamWriter(Directorio + "/" + Nombre_Archivo + ".txt", true);
             string Cadena = DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss") + ">>>>" + Descripcion;
-
             Archivo.WriteLine(Cadena);
             Archivo.Close();
 
