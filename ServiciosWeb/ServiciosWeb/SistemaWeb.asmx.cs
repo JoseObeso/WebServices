@@ -1,9 +1,11 @@
-﻿using ServiciosWeb.Sistema;
+﻿using Newtonsoft.Json;
+using ServiciosWeb.Sistema;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Services;
+using System.Xml;
 
 namespace ServiciosWeb
 {
@@ -57,8 +59,58 @@ namespace ServiciosWeb
             return Fruta;
         }
 
+        [WebMethod(Description = "Guardar XML")]
+        public string GuardarXML(string xml)
+        {
+
+            XmlDocument Data_Xml = new XmlDocument();
+
+            Data_Xml.LoadXml(xml);
+
+            XmlNode documento = Data_Xml.SelectSingleNode("Documento");
+
+            string deporte = documento["deporte"].InnerText;
+
+            Funciones.Logs("xml", deporte + "Equipos");
+
+            return "Guardado Ok";
+ 
+        }
+
+        [WebMethod(Description = "Conjunto de JSON")]
+        public string RetornoJSON()
+        {
+
+            dynamic Json = new Dictionary<string, dynamic>();
+            Json.Add("deporte", "Futbol");
+
+            List<Dictionary<string, string>> equipos = new List<Dictionary<string, string>>();
+
+            Dictionary<string, string> equipo1 = new Dictionary<string, string>();
+            equipo1.Add("nombre", "Manchester");
+            equipo1.Add("pais", "Inglaterra");
+
+            equipos.Add(equipo1);
+
+            Dictionary<string, string> equipo2 = new Dictionary<string, string>();
+            equipo2.Add("nombre", "Jose Galvez");
+            equipo2.Add("pais", "Peru");
 
 
+            equipos.Add(equipo2);
+
+
+            Json.Add("equipos", equipos);
+
+            return JsonConvert.SerializeObject(Json);
+
+
+
+
+
+
+
+        }
 
 
 
