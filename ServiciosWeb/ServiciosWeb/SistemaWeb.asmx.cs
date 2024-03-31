@@ -2,6 +2,8 @@
 using ServiciosWeb.Sistema;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Services;
@@ -103,12 +105,54 @@ namespace ServiciosWeb
             Json.Add("equipos", equipos);
 
             return JsonConvert.SerializeObject(Json);
+             
 
 
+        }
 
+        [WebMethod(Description = "Metodo para listar loas marcaciones")]
+        public string ObtenerProducto()
+        {
+            List<Dictionary<string, string>> json = new List<Dictionary<string, string>>();
+            if (!EnlaceSQLServer.conectarSQLServer())
+            {
+                return "No existe Conexion";
+            }
 
+            try
+            {
+                SqlCommand QuerySQL = new SqlCommand("select top 200 fechatxt, hora from marcacion where tarjeta = '32921099' order by fecha desc", EnlaceSQLServer.Conexion);
+                QuerySQL.CommandType = CommandType.Text;
+                QuerySQL.CommandTimeout = DatosEnlace.timeOutSqlServer;
+                SqlDataReader LecturaRegistros = QuerySQL.ExecuteReader();
+                if (LecturaRegistros.HasRows)
+                {
+                    Dictionary<string, string> Filas;
+                    while (LecturaRegistros.Read())
+                    {
+                        Filas = new Dictionary<string, string>();
 
+                        for (int i = 0; i < LecturaRegistros.FieldCount; i++)
+                        {
+                            Filas.Add(LecturaRegistros.GetName(i), LecturaRegistros.GetValue(i).ToString());
+                        }
+                        json.Add(Filas);
+                    }
+                }
+                LecturaRegistros.Close();
+                LecturaRegistros.Dispose();
+                LecturaRegistros = null;
+                QuerySQL.Dispose();
 
+            }
+            catch (Exception e)
+            {
+                Funciones.Logs("ObtenerProducto", e.Message);
+                Funciones.Logs("ObtenerProducto_debug", e.StackTrace);
+
+            }
+
+            return JsonConvert.SerializeObject(json);
 
         }
 

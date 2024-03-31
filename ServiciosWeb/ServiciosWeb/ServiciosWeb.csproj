@@ -79,6 +79,8 @@
       <DependentUpon>SistemaWeb.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Sistema\DatosEnlace.cs" />
+    <Compile Include="Sistema\EnlaceSQLServer.cs" />
     <Compile Include="Sistema\Funciones.cs" />
   </ItemGroup>
   <ItemGroup>
