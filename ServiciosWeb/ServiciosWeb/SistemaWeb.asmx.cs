@@ -46,9 +46,7 @@ namespace ServiciosWeb
             int Suma = Numero1 + Numero2;
             return Suma;
         }
-
-
-
+               
         [WebMethod(Description = "Array de Frutas")]
         public string[] ObtenerFrutas()
         {
